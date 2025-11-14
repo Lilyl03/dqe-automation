@@ -1,0 +1,9 @@
+python -m venv venv #to create virtual environment
+venv\Scripts\activate #to activate virtual environment
+ pip install pytest pytest-html #installing required packages
+ pytest -m unmarked # run tests that are unmarked
+pytest -m "validate_csv and not xfail" # run tests that are marked validate_csv and not xfail
+pytest -m "validate_csv "  # run tests that are marked validate_csv
+pytest -m unmarked --html=reports/unmarked_tests.html --self-contained-html
+pytest -m "validate_csv and not xfail" --html=reports/validate_csv_tests.html --self-contained-html
+pytest --html=reports/report.html --self-contained-html
