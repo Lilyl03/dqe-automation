@@ -1,37 +1,42 @@
 import pandas as pd
 import os
-from typing import List, Dict, Any
+from typing import List, Optional
 
 
 class ParquetReader:
     def __init__(self, base_path: str = "/parquet_data"):
         self.base_path = base_path
 
-    def process(self, relative_path: str, include_subfolders: bool = False) -> List[Dict[str, Any]]:
-        """Read parquet files and return as list of dictionaries"""
-        try:
-            full_path = os.path.join(self.base_path, relative_path)
+    def process(self, relative_path: str, include_subfolders: bool = False) -> pd.DataFrame:
+        full_path = os.path.join(self.base_path, relative_path)
 
-            if include_subfolders:
-                # Read all parquet files in directory and subdirectories
-                all_files = []
-                for root, dirs, files in os.walk(full_path):
-                    for file in files:
-                        if file.endswith('.parquet'):
-                            all_files.append(os.path.join(root, file))
+        if not os.path.exists(full_path):
+            raise FileNotFoundError(f"Path does not exist: {full_path}")
 
-                if not all_files:
-                    raise FileNotFoundError(f"No parquet files found in {full_path}")
+        if os.path.isfile(full_path):
+            return pd.read_parquet(full_path, engine='auto')  # 'auto' will use available engine
+        else:
+            return self._read_directory(full_path, include_subfolders)
 
-                dfs = [pd.read_parquet(file) for file in all_files]
-                combined_df = pd.concat(dfs, ignore_index=True)
-            else:
-                if os.path.isdir(full_path):
-                    combined_df = pd.read_parquet(full_path)
-                else:
-                    combined_df = pd.read_parquet(full_path + '.parquet')
+    def _read_directory(self, directory_path: str, include_subfolders: bool) -> pd.DataFrame:
+        parquet_files = []
 
-            return combined_df.to_dict('records')
+        if include_subfolders:
+            for root, dirs, files in os.walk(directory_path):
+                for file in files:
+                    if file.endswith('.parquet'):
+                        parquet_files.append(os.path.join(root, file))
+        else:
+            for file in os.listdir(directory_path):
+                if file.endswith('.parquet'):
+                    parquet_files.append(os.path.join(directory_path, file))
 
-        except Exception as e:
-            raise Exception(f"Failed to read parquet files: {e}")
+        if not parquet_files:
+            raise FileNotFoundError(f"No Parquet files found in: {directory_path}")
+
+        dataframes = []
+        for file_path in parquet_files:
+            df = pd.read_parquet(file_path, engine='auto')
+            dataframes.append(df)
+
+        return pd.concat(dataframes, ignore_index=True)
