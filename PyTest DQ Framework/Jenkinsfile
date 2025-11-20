@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Use Jenkins credentials for database access
         POSTGRES_SECRET = credentials('postgres-credentials')
     }
 
@@ -18,10 +17,11 @@ pipeline {
             steps {
                 sh '''
                     echo "Setting up Python virtual environment..."
-                    python -m venv venv
+                    # Use python3 explicitly
+                    python3 -m venv venv
                     . venv/bin/activate
-                    pip install --upgrade pip
-                    pip install -r requirements.txt
+                    pip3 install --upgrade pip
+                    pip3 install -r requirements.txt
                     echo "Dependencies installed successfully"
                 '''
             }
@@ -33,8 +33,8 @@ pipeline {
                     echo "Running Data Quality Tests with user: ${POSTGRES_SECRET_USR}"
                     . venv/bin/activate
 
-                    # Run tests - using container name and internal port
-                    pytest tests/dq\\ checks/parquet_files/test_facility_name_min_time_spent_per_visit_date.py \
+                    # Run tests
+                    python -m pytest tests/dq\\ checks/parquet_files/test_facility_name_min_time_spent_per_visit_date.py \
                         -m "parquet_data" \
                         --db_host="postgres" \
                         --db_port="5432" \
@@ -58,10 +58,7 @@ pipeline {
                     echo "Report generated at: html_report/report.html"
                 '''
 
-                // Archive the HTML report
                 archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
-
-                // Publish HTML report
                 publishHTML(target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
@@ -80,7 +77,6 @@ pipeline {
         }
         success {
             sh 'echo "SUCCESS: All Data Quality tests passed!"'
-            sh 'echo "User ${POSTGRES_SECRET_USR} authentication successful"'
         }
         failure {
             sh 'echo "FAILURE: Tests failed or authentication issue"'
