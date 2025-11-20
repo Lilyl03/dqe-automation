@@ -75,6 +75,13 @@ pipeline {
                 '''
 
                 archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
+                publishHTML(target: [
+            allowMissing: false,  // Fail the pipeline if the report is missing
+            keepAll: true,        // Keep all reports from previous runs
+            reportDir: 'PyTest DQ Framework/html_report', // Correct directory path
+            reportFiles: 'index.html',                          // Entry point file
+            reportName: 'HTML Test Report'                      // Display name in Jenkins
+])
             }
         }
     }
