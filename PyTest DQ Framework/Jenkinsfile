@@ -10,14 +10,28 @@ pipeline {
             steps {
                 checkout scm
                 sh 'echo "Repository checked out successfully - User: ${POSTGRES_SECRET_USR}"'
+                sh 'ls -la'
+            }
+        }
+
+        stage('Navigate to Project Directory') {
+            steps {
+                sh '''
+                    echo "Current directory:"
+                    pwd
+                    echo "Listing contents:"
+                    ls -la
+                    echo "Looking for PyTest DQ Framework directory..."
+                    ls -la "PyTest DQ Framework/" || echo "Directory not found"
+                '''
             }
         }
 
         stage('Setup Python Environment') {
             steps {
                 sh '''
-                    echo "Setting up Python virtual environment..."
-                    # Use python3 explicitly
+                    echo "Setting up Python virtual environment in PyTest DQ Framework directory..."
+                    cd "PyTest DQ Framework"
                     python3 -m venv venv
                     . venv/bin/activate
                     pip3 install --upgrade pip
@@ -31,6 +45,7 @@ pipeline {
             steps {
                 sh '''
                     echo "Running Data Quality Tests with user: ${POSTGRES_SECRET_USR}"
+                    cd "PyTest DQ Framework"
                     . venv/bin/activate
 
                     # Run tests
@@ -54,16 +69,17 @@ pipeline {
             steps {
                 sh '''
                     echo "Archiving test results..."
+                    cd "PyTest DQ Framework"
                     mkdir -p html_report
                     echo "Report generated at: html_report/report.html"
                 '''
 
-                archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
+                archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
                 publishHTML(target: [
                     allowMissing: false,
                     alwaysLinkToLastBuild: true,
                     keepAll: true,
-                    reportDir: 'html_report',
+                    reportDir: 'PyTest DQ Framework/html_report',
                     reportFiles: 'report.html',
                     reportName: 'PyTest DQ Framework Report'
                 ])
