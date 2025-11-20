@@ -66,6 +66,7 @@ def test_check_not_null_values(target_data, data_quality_library):
         ['facility_name', 'visit_date', 'min_time_spent']
     )
 
+
 @pytest.mark.skip(reason="Expected duplicate data in aggregation - for homework demonstration")
 @pytest.mark.parquet_data
 @pytest.mark.facility_name_min_time_spent_per_visit_date

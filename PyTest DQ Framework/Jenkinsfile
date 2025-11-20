@@ -75,14 +75,6 @@ pipeline {
                 '''
 
                 archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
-                publishHTML(target: [
-                    allowMissing: false,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'PyTest DQ Framework/html_report',
-                    reportFiles: 'report.html',
-                    reportName: 'PyTest DQ Framework Report'
-                ])
             }
         }
     }
