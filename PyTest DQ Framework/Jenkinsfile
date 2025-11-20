@@ -68,10 +68,9 @@ pipeline {
         stage('Archive Test Results') {
             steps {
                 sh '''
-                    echo "Archiving test results..."
-                    cd "PyTest DQ Framework"
-                    mkdir -p html_report
-                    echo "Report generated at: html_report/report.html"
+                echo "Archiving test results (always executed)..."
+                cd "PyTest DQ Framework"
+                ls -la html_report/ || echo "HTML report directory might not exist"
                 '''
 
                 archiveArtifacts artifacts: 'PyTest DQ Framework/html_report/**', allowEmptyArchive: true
