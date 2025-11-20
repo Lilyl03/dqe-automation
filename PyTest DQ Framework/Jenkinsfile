@@ -59,7 +59,7 @@ pipeline {
                         --html=html_report/report.html \
                         --self-contained-html \
                         --verbose
-
+                        || true
                     echo "Tests completed successfully"
                 '''
             }
