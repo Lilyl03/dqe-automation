@@ -9,20 +9,18 @@ import pytest
 
 @pytest.fixture(scope='module')
 def source_data(db_connection):
-
     source_query = """
     SELECT 
         f.facility_name,
         DATE(v.visit_timestamp) as visit_date,
         MIN(v.duration_minutes) as min_time_spent
     FROM visits v
-    JOIN facilities f ON v.facility_id = f.facility_id
+    JOIN facilities f ON v.facility_id = f.id  -- CHANGED THIS LINE
     GROUP BY f.facility_name, DATE(v.visit_timestamp)
     ORDER BY f.facility_name, visit_date
     """
     source_data = db_connection.get_data_sql(source_query)
     return source_data
-
 
 @pytest.fixture(scope='module')
 def target_data(parquet_reader):
