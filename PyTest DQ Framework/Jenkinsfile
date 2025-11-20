@@ -1,0 +1,89 @@
+pipeline {
+    agent any
+
+    environment {
+        // Use Jenkins credentials for database access
+        POSTGRES_SECRET = credentials('postgres-credentials')
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                sh 'echo "Repository checked out successfully - User: ${POSTGRES_SECRET_USR}"'
+            }
+        }
+
+        stage('Setup Python Environment') {
+            steps {
+                sh '''
+                    echo "Setting up Python virtual environment..."
+                    python -m venv venv
+                    . venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r requirements.txt
+                    echo "Dependencies installed successfully"
+                '''
+            }
+        }
+
+        stage('Run Data Quality Tests') {
+            steps {
+                sh '''
+                    echo "Running Data Quality Tests with user: ${POSTGRES_SECRET_USR}"
+                    . venv/bin/activate
+
+                    # Run tests - using container name and internal port
+                    pytest tests/dq\\ checks/parquet_files/test_facility_name_min_time_spent_per_visit_date.py \
+                        -m "parquet_data" \
+                        --db_host="postgres" \
+                        --db_port="5432" \
+                        --db_name="mydatabase" \
+                        --db_user=$POSTGRES_SECRET_USR \
+                        --db_password=$POSTGRES_SECRET_PSW \
+                        --html=html_report/report.html \
+                        --self-contained-html \
+                        --verbose
+
+                    echo "Tests completed successfully"
+                '''
+            }
+        }
+
+        stage('Archive Test Results') {
+            steps {
+                sh '''
+                    echo "Archiving test results..."
+                    mkdir -p html_report
+                    echo "Report generated at: html_report/report.html"
+                '''
+
+                // Archive the HTML report
+                archiveArtifacts artifacts: 'html_report/**', allowEmptyArchive: true
+
+                // Publish HTML report
+                publishHTML(target: [
+                    allowMissing: false,
+                    alwaysLinkToLastBuild: true,
+                    keepAll: true,
+                    reportDir: 'html_report',
+                    reportFiles: 'report.html',
+                    reportName: 'PyTest DQ Framework Report'
+                ])
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'echo "Pipeline execution completed - Check HTML report for details"'
+        }
+        success {
+            sh 'echo "SUCCESS: All Data Quality tests passed!"'
+            sh 'echo "User ${POSTGRES_SECRET_USR} authentication successful"'
+        }
+        failure {
+            sh 'echo "FAILURE: Tests failed or authentication issue"'
+        }
+    }
+}
