@@ -28,6 +28,10 @@ class DataQualityLibrary:
 
     @staticmethod
     def check_data_full_data_set(df1, df2):
+        for col in df1.columns:
+            if 'date' in col.lower():
+                df1[col] = pd.to_datetime(df1[col])
+                df2[col] = pd.to_datetime(df2[col])
         merged = pd.merge(df1, df2, how='left', indicator=True)
         missing_rows = merged[merged['_merge'] == 'left_only']
 
