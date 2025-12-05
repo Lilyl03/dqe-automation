@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.3.2 (Python 3.12.2 on win32)" generated="2025-12-05T23:02:38.302212" rpa="false" schemaversion="5">
+<suite id="s1" name="Test" source="C:\Users\LMe\PycharmProjects\dqe-automation\Robot Framework\test.robot">
+<kw name="Setup Browser" type="SETUP">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2025-12-05T23:02:39.799525" level="INFO">Opening browser 'chrome' to base url 'about:blank'.</msg>
+<arg>about:blank</arg>
+<arg>${BROWSER}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2025-12-05T23:02:39.799525" elapsed="1.734969"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2025-12-05T23:02:41.535215" elapsed="0.054288"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:02:39.799525" elapsed="1.789978"/>
+</kw>
+<test id="s1-t1" name="Test 1: Exact Data Comparison" line="21">
+<kw name="Go To" owner="SeleniumLibrary">
+<msg time="2025-12-05T23:02:41.591234" level="INFO">Opening url 'file://C:\Users\LMe\PycharmProjects\dqe-automation\Robot Framework/report.html'</msg>
+<arg>file://C:\\Users\\LMe\\PycharmProjects\\dqe-automation\\Robot Framework/${REPORT_FILE}</arg>
+<doc>Navigates the current browser window to the provided ``url``.</doc>
+<status status="PASS" start="2025-12-05T23:02:41.590728" elapsed="4.489050"/>
+</kw>
+<kw name="Wait Until Page Contains Element" owner="SeleniumLibrary">
+<arg>class:table</arg>
+<arg>10s</arg>
+<doc>Waits until the element ``locator`` appears on the current page.</doc>
+<status status="PASS" start="2025-12-05T23:02:46.082112" elapsed="0.045795"/>
+</kw>
+<kw name="Read Html Table To Dataframe" owner="helper">
+<msg time="2025-12-05T23:02:53.451689" level="INFO">${html_df} =       Facility Type  Visit Date  Average Time Spent
+3  Specialty Center  2025-10-29                  45
+4          Hospital  2025-10-29                  38
+5            Clinic  2025-10-29             ...</msg>
+<var>${html_df}</var>
+<arg>${REPORT_FILE}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:02:46.130482" elapsed="7.321207"/>
+</kw>
+<kw name="Read Parquet To Dataframe" owner="helper">
+<msg time="2025-12-05T23:02:53.749972" level="INFO">${parquet_df} =       Facility Type  Visit Date  Average Time Spent
+0          Hospital  2025-10-29                  38
+1            Clinic  2025-10-29                  31
+2  Specialty Center  2025-10-29             ...</msg>
+<var>${parquet_df}</var>
+<arg>${PARQUET_FOLDER}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:02:53.453702" elapsed="0.296270"/>
+</kw>
+<kw name="Compare Dataframes" owner="helper">
+<msg time="2025-12-05T23:02:53.761311" level="INFO">${are_equal} = True</msg>
+<msg time="2025-12-05T23:02:53.761311" level="INFO">${message} = DataFrames match exactly.</msg>
+<var>${are_equal}</var>
+<var>${message}</var>
+<arg>${html_df}</arg>
+<arg>${parquet_df}</arg>
+<status status="PASS" start="2025-12-05T23:02:53.757275" elapsed="0.004036"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-12-05T23:02:53.763328" level="INFO">✓ Test 1 PASSED: DataFrames match exactly.</msg>
+<arg>✓ Test 1 PASSED: ${message}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-12-05T23:02:53.763328" elapsed="0.000000"/>
+</kw>
+<arg>${are_equal}</arg>
+<arg>Log</arg>
+<arg>✓ Test 1 PASSED: ${message}</arg>
+<arg>ELSE</arg>
+<arg>Fail</arg>
+<arg>✗ Test 1 FAILED: ${message}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-12-05T23:02:53.761311" elapsed="0.002017"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:02:41.589503" elapsed="12.173825"/>
+</test>
+<test id="s1-t2" name="Test 2: DQE - Compare Row Counts" line="38">
+<kw name="Read Html Table To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:02.532966" level="INFO">${html_df} =       Facility Type  Visit Date  Average Time Spent
+3  Specialty Center  2025-10-29                  45
+4          Hospital  2025-10-29                  38
+5            Clinic  2025-10-29             ...</msg>
+<var>${html_df}</var>
+<arg>${REPORT_FILE}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:02:53.765347" elapsed="8.767619"/>
+</kw>
+<kw name="Read Parquet To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:02.781378" level="INFO">${parquet_df} =       Facility Type  Visit Date  Average Time Spent
+0          Hospital  2025-10-29                  38
+1            Clinic  2025-10-29                  31
+2  Specialty Center  2025-10-29             ...</msg>
+<var>${parquet_df}</var>
+<arg>${PARQUET_FOLDER}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:02.532966" elapsed="0.248412"/>
+</kw>
+<kw name="Get Row Count" owner="helper">
+<msg time="2025-12-05T23:03:02.784958" level="INFO">${html_rows} = 3</msg>
+<var>${html_rows}</var>
+<arg>${html_df}</arg>
+<doc>Return number of rows</doc>
+<status status="PASS" start="2025-12-05T23:03:02.781378" elapsed="0.003580"/>
+</kw>
+<kw name="Get Row Count" owner="helper">
+<msg time="2025-12-05T23:03:02.784958" level="INFO">${parquet_rows} = 3</msg>
+<var>${parquet_rows}</var>
+<arg>${parquet_df}</arg>
+<doc>Return number of rows</doc>
+<status status="PASS" start="2025-12-05T23:03:02.784958" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${html_rows}</arg>
+<arg>${parquet_rows}</arg>
+<arg>Row count mismatch: HTML has ${html_rows} rows, Parquet has ${parquet_rows} rows</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-12-05T23:03:02.784958" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:02:53.765347" elapsed="9.019611"/>
+</test>
+<test id="s1-t3" name="Test 3: DQE - Compare Column Counts" line="48">
+<kw name="Read Html Table To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:10.010501" level="INFO">${html_df} =       Facility Type  Visit Date  Average Time Spent
+3  Specialty Center  2025-10-29                  45
+4          Hospital  2025-10-29                  38
+5            Clinic  2025-10-29             ...</msg>
+<var>${html_df}</var>
+<arg>${REPORT_FILE}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:02.784958" elapsed="7.225543"/>
+</kw>
+<kw name="Read Parquet To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:10.268742" level="INFO">${parquet_df} =       Facility Type  Visit Date  Average Time Spent
+0          Hospital  2025-10-29                  38
+1            Clinic  2025-10-29                  31
+2  Specialty Center  2025-10-29             ...</msg>
+<var>${parquet_df}</var>
+<arg>${PARQUET_FOLDER}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:10.010501" elapsed="0.258241"/>
+</kw>
+<kw name="Get Column Count" owner="helper">
+<msg time="2025-12-05T23:03:10.268742" level="INFO">${html_cols} = 3</msg>
+<var>${html_cols}</var>
+<arg>${html_df}</arg>
+<doc>Return number of columns</doc>
+<status status="PASS" start="2025-12-05T23:03:10.268742" elapsed="0.000000"/>
+</kw>
+<kw name="Get Column Count" owner="helper">
+<msg time="2025-12-05T23:03:10.268742" level="INFO">${parquet_cols} = 3</msg>
+<var>${parquet_cols}</var>
+<arg>${parquet_df}</arg>
+<doc>Return number of columns</doc>
+<status status="PASS" start="2025-12-05T23:03:10.268742" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${html_cols}</arg>
+<arg>${parquet_cols}</arg>
+<arg>Column count mismatch: HTML has ${html_cols} columns, Parquet has ${parquet_cols} columns</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-12-05T23:03:10.268742" elapsed="0.002011"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:03:02.784958" elapsed="7.485795"/>
+</test>
+<test id="s1-t4" name="Test 4: DQE - Compare Facility Type Distribution" line="58">
+<kw name="Read Html Table To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:17.539957" level="INFO">${html_df} =       Facility Type  Visit Date  Average Time Spent
+3  Specialty Center  2025-10-29                  45
+4          Hospital  2025-10-29                  38
+5            Clinic  2025-10-29             ...</msg>
+<var>${html_df}</var>
+<arg>${REPORT_FILE}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:10.270753" elapsed="7.269204"/>
+</kw>
+<kw name="Read Parquet To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:17.823395" level="INFO">${parquet_df} =       Facility Type  Visit Date  Average Time Spent
+0          Hospital  2025-10-29                  38
+1            Clinic  2025-10-29                  31
+2  Specialty Center  2025-10-29             ...</msg>
+<var>${parquet_df}</var>
+<arg>${PARQUET_FOLDER}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:17.541975" elapsed="0.281420"/>
+</kw>
+<kw name="Get Facility Type Counts" owner="helper">
+<msg time="2025-12-05T23:03:17.827227" level="INFO">${html_counts} = {'Specialty Center': 1, 'Hospital': 1, 'Clinic': 1}</msg>
+<var>${html_counts}</var>
+<arg>${html_df}</arg>
+<doc>Return facility type counts as a dictionary</doc>
+<status status="PASS" start="2025-12-05T23:03:17.827227" elapsed="0.000000"/>
+</kw>
+<kw name="Get Facility Type Counts" owner="helper">
+<msg time="2025-12-05T23:03:17.829488" level="INFO">${parquet_counts} = {'Hospital': 1, 'Clinic': 1, 'Specialty Center': 1}</msg>
+<var>${parquet_counts}</var>
+<arg>${parquet_df}</arg>
+<doc>Return facility type counts as a dictionary</doc>
+<status status="PASS" start="2025-12-05T23:03:17.829488" elapsed="0.000000"/>
+</kw>
+<kw name="Dictionaries Should Be Equal" owner="Collections">
+<arg>${html_counts}</arg>
+<arg>${parquet_counts}</arg>
+<arg>Facility Type distribution mismatch: HTML: ${html_counts}, Parquet: ${parquet_counts}</arg>
+<doc>Fails if the given dictionaries are not equal.</doc>
+<status status="PASS" start="2025-12-05T23:03:17.832514" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:03:10.270753" elapsed="7.563782"/>
+</test>
+<test id="s1-t5" name="Test 5: DQE - Compare Visit Date Distribution" line="68">
+<kw name="Read Html Table To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:25.357727" level="INFO">${html_df} =       Facility Type  Visit Date  Average Time Spent
+3  Specialty Center  2025-10-29                  45
+4          Hospital  2025-10-29                  38
+5            Clinic  2025-10-29             ...</msg>
+<var>${html_df}</var>
+<arg>${REPORT_FILE}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:17.836552" elapsed="7.521175"/>
+</kw>
+<kw name="Read Parquet To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:25.546669" level="INFO">${parquet_df} =       Facility Type  Visit Date  Average Time Spent
+0          Hospital  2025-10-29                  38
+1            Clinic  2025-10-29                  31
+2  Specialty Center  2025-10-29             ...</msg>
+<var>${parquet_df}</var>
+<arg>${PARQUET_FOLDER}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:25.357727" elapsed="0.188942"/>
+</kw>
+<kw name="Get Visit Date Counts" owner="helper">
+<msg time="2025-12-05T23:03:25.548227" level="INFO">${html_counts} = {'2025-10-29': 3}</msg>
+<var>${html_counts}</var>
+<arg>${html_df}</arg>
+<doc>Return visit date counts as a dictionary</doc>
+<status status="PASS" start="2025-12-05T23:03:25.546669" elapsed="0.001558"/>
+</kw>
+<kw name="Get Visit Date Counts" owner="helper">
+<msg time="2025-12-05T23:03:25.548227" level="INFO">${parquet_counts} = {'2025-10-29': 3}</msg>
+<var>${parquet_counts}</var>
+<arg>${parquet_df}</arg>
+<doc>Return visit date counts as a dictionary</doc>
+<status status="PASS" start="2025-12-05T23:03:25.548227" elapsed="0.000000"/>
+</kw>
+<kw name="Dictionaries Should Be Equal" owner="Collections">
+<arg>${html_counts}</arg>
+<arg>${parquet_counts}</arg>
+<arg>Visit Date distribution mismatch: HTML: ${html_counts}, Parquet: ${parquet_counts}</arg>
+<doc>Fails if the given dictionaries are not equal.</doc>
+<status status="PASS" start="2025-12-05T23:03:25.548227" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:03:17.836552" elapsed="7.711675"/>
+</test>
+<test id="s1-t6" name="Test 6: DQE - Compare Average Time Spent Statistics" line="78">
+<kw name="Read Html Table To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:32.734198" level="INFO">${html_df} =       Facility Type  Visit Date  Average Time Spent
+3  Specialty Center  2025-10-29                  45
+4          Hospital  2025-10-29                  38
+5            Clinic  2025-10-29             ...</msg>
+<var>${html_df}</var>
+<arg>${REPORT_FILE}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:25.551292" elapsed="7.182906"/>
+</kw>
+<kw name="Read Parquet To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:32.968277" level="INFO">${parquet_df} =       Facility Type  Visit Date  Average Time Spent
+0          Hospital  2025-10-29                  38
+1            Clinic  2025-10-29                  31
+2  Specialty Center  2025-10-29             ...</msg>
+<var>${parquet_df}</var>
+<arg>${PARQUET_FOLDER}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:32.736216" elapsed="0.232061"/>
+</kw>
+<kw name="Get Average Time Stats" owner="helper">
+<msg time="2025-12-05T23:03:32.969408" level="INFO">${html_stats} = {'mean': 38.0, 'sum': 114.0, 'count': 3, 'min': 31.0, 'max': 45.0}</msg>
+<var>${html_stats}</var>
+<arg>${html_df}</arg>
+<doc>Return average time spent statistics</doc>
+<status status="PASS" start="2025-12-05T23:03:32.968840" elapsed="0.000568"/>
+</kw>
+<kw name="Get Average Time Stats" owner="helper">
+<msg time="2025-12-05T23:03:32.969969" level="INFO">${parquet_stats} = {'mean': 38.0, 'sum': 114.0, 'count': 3, 'min': 31.0, 'max': 45.0}</msg>
+<var>${parquet_stats}</var>
+<arg>${parquet_df}</arg>
+<doc>Return average time spent statistics</doc>
+<status status="PASS" start="2025-12-05T23:03:32.969408" elapsed="0.000561"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-12-05T23:03:32.970532" level="INFO">${html_mean} = 38.0</msg>
+<var>${html_mean}</var>
+<arg>${html_stats}[mean]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-12-05T23:03:32.969969" elapsed="0.000563"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-12-05T23:03:32.970532" level="INFO">${parquet_mean} = 38.0</msg>
+<var>${parquet_mean}</var>
+<arg>${parquet_stats}[mean]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-12-05T23:03:32.970532" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<arg>${html_mean}</arg>
+<arg>${parquet_mean}</arg>
+<arg>0.01</arg>
+<arg>Average Time Spent mean mismatch: HTML=${html_mean}, Parquet=${parquet_mean}</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-12-05T23:03:32.971090" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-12-05T23:03:32.971617" level="INFO">${html_sum} = 114.0</msg>
+<var>${html_sum}</var>
+<arg>${html_stats}[sum]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-12-05T23:03:32.971617" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-12-05T23:03:32.972167" level="INFO">${parquet_sum} = 114.0</msg>
+<var>${parquet_sum}</var>
+<arg>${parquet_stats}[sum]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-12-05T23:03:32.971617" elapsed="0.000550"/>
+</kw>
+<kw name="Should Be Equal As Numbers" owner="BuiltIn">
+<arg>${html_sum}</arg>
+<arg>${parquet_sum}</arg>
+<arg>0.01</arg>
+<arg>Total Time Spent mismatch: HTML=${html_sum}, Parquet=${parquet_sum}</arg>
+<doc>Fails if objects are unequal after converting them to real numbers.</doc>
+<status status="PASS" start="2025-12-05T23:03:32.972167" elapsed="0.000562"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:03:25.550283" elapsed="7.423570"/>
+</test>
+<test id="s1-t7" name="Test 7: DQE - Compare Missing Values" line="97">
+<kw name="Read Html Table To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:40.177610" level="INFO">${html_df} =       Facility Type  Visit Date  Average Time Spent
+3  Specialty Center  2025-10-29                  45
+4          Hospital  2025-10-29                  38
+5            Clinic  2025-10-29             ...</msg>
+<var>${html_df}</var>
+<arg>${REPORT_FILE}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:32.975861" elapsed="7.201749"/>
+</kw>
+<kw name="Read Parquet To Dataframe" owner="helper">
+<msg time="2025-12-05T23:03:40.383301" level="INFO">${parquet_df} =       Facility Type  Visit Date  Average Time Spent
+0          Hospital  2025-10-29                  38
+1            Clinic  2025-10-29                  31
+2  Specialty Center  2025-10-29             ...</msg>
+<var>${parquet_df}</var>
+<arg>${PARQUET_FOLDER}</arg>
+<arg>${FILTER_DATE}</arg>
+<status status="PASS" start="2025-12-05T23:03:40.177610" elapsed="0.205691"/>
+</kw>
+<kw name="Get Missing Value Count" owner="helper">
+<msg time="2025-12-05T23:03:40.383301" level="INFO">${html_missing} = 0</msg>
+<var>${html_missing}</var>
+<arg>${html_df}</arg>
+<doc>Return total count of missing values</doc>
+<status status="PASS" start="2025-12-05T23:03:40.383301" elapsed="0.000000"/>
+</kw>
+<kw name="Get Missing Value Count" owner="helper">
+<msg time="2025-12-05T23:03:40.383301" level="INFO">${parquet_missing} = 0</msg>
+<var>${parquet_missing}</var>
+<arg>${parquet_df}</arg>
+<doc>Return total count of missing values</doc>
+<status status="PASS" start="2025-12-05T23:03:40.383301" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${html_missing}</arg>
+<arg>${parquet_missing}</arg>
+<arg>Missing value count mismatch: HTML has ${html_missing}, Parquet has ${parquet_missing}</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="PASS" start="2025-12-05T23:03:40.383301" elapsed="0.000000"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:03:32.975288" elapsed="7.408013"/>
+</test>
+<kw name="Close All Browsers" owner="SeleniumLibrary" type="TEARDOWN">
+<doc>Closes all open browsers and resets the browser cache.</doc>
+<status status="PASS" start="2025-12-05T23:03:40.383301" elapsed="2.305812"/>
+</kw>
+<status status="PASS" start="2025-12-05T23:02:38.306230" elapsed="64.382883"/>
+</suite>
+<statistics>
+<total>
+<stat pass="7" fail="0" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat name="Test" id="s1" pass="7" fail="0" skip="0">Test</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
